@@ -75,66 +75,66 @@ Best Practices:
 Example of a Comprehensive UI:
 
 <Box sx={{ p: 3 }}>
-  <Grid container spacing={3}>
-    <Grid item xs={12} md={8}>
-      <Typography variant="h4" color="primary" gutterBottom>
-        Dashboard Overview
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-        Welcome back! Here's your latest activity summary.
-      </Typography>
-      
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Paper sx={{ p: 3, height: "100%" }}>
-            <Stack spacing={2}>
-              <Typography variant="h6">Recent Activity</Typography>
-              <TextField
-                fullWidth
-                label="Search activities"
-                variant="outlined"
-                size="small"
-              />
-              <Button variant="contained" color="primary">
-                View All Activities
-              </Button>
-            </Stack>
-          </Paper>
-        </Grid>
+    <Grid container spacing={3}>
+      <Grid item xs={12} md={8}>
+        <Typography variant="h4" color="primary" gutterBottom>
+          Dashboard Overview
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+          Welcome back! Here's your latest activity summary.
+        </Typography>
         
-        <Grid item xs={12} sm={6}>
-          <Card sx={{ height: "100%" }}>
-            <CardHeader
-              title="Statistics"
-              subheader="Last 30 days"
-            />
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                Your performance has increased by 25%
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small" color="primary">Learn More</Button>
-            </CardActions>
-          </Card>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Paper sx={{ p: 3, height: "100%" }}>
+              <Stack spacing={2}>
+                <Typography variant="h6">Recent Activity</Typography>
+                <TextField
+                  fullWidth
+                  label="Search activities"
+                  variant="outlined"
+                  size="small"
+                />
+                <Button variant="contained" color="primary">
+                  View All Activities
+                </Button>
+              </Stack>
+            </Paper>
+          </Grid>
+          
+          <Grid item xs={12} sm={6}>
+            <Card sx={{ height: "100%" }}>
+              <CardHeader
+                title="Statistics"
+                subheader="Last 30 days"
+              />
+              <CardContent>
+                <Typography variant="body2" color="text.secondary">
+                  Your performance has increased by 25%
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small" color="primary">Learn More</Button>
+              </CardActions>
+            </Card>
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
 
-    <Grid item xs={12} md={4}>
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>Quick Actions</Typography>
-        <Stack spacing={2}>
-          <Button variant="outlined" color="primary" fullWidth>
-            Create New Report
-          </Button>
-          <Button variant="outlined" color="secondary" fullWidth>
-            View Analytics
-          </Button>
-        </Stack>
-      </Paper>
+      <Grid item xs={12} md={4}>
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+          <Stack spacing={2}>
+            <Button variant="outlined" color="primary" fullWidth>
+              Create New Report
+            </Button>
+            <Button variant="outlined" color="secondary" fullWidth>
+              View Analytics
+            </Button>
+          </Stack>
+        </Paper>
+      </Grid>
     </Grid>
-  </Grid>
 </Box>`
 
 function cleanGeneratedCode(code: string, model: string): string {
@@ -184,12 +184,12 @@ function Demo() {
 }
 
 Rules:
-1. MUST be a function named "Demo" with no parameters
+1. MUST be a function named "PromptAnswer" with no parameters
 2. MUST have a return statement with JSX
 3. DO NOT include any imports - all components are already available in scope
 4. Use ONLY these components (they are already imported):
    - MUI Core: Box, Grid, Paper, Typography, Button, TextField, Card, CardHeader, CardContent, CardActions, Stack, IconButton
-   - MUI X Charts: LineChart, BarChart, PieChart, ScatterChart
+   - MUI X Charts: ResponsiveChartContainer, BarPlot, LinePlot, ChartsXAxis
    - MUI X DataGrid: DataGrid, GridToolbar, GridActionsCellItem, GridRowModes, GridRowEditStopReasons
    - MUI X TreeView: TreeView, TreeItem
    - Available icons (MUST use with Icon suffix):
@@ -200,7 +200,7 @@ Rules:
      * Media: PlayArrowIcon, PauseIcon, StopIcon, VolumeUpIcon, VolumeDownIcon
      * Files: FolderIcon, FileIcon, DownloadIcon, UploadIcon, PrintIcon
      * Social: ChatIcon, MailIcon, PhoneIcon, SendIcon
-     * And more: StarIcon, FavoriteIcon, LockIcon, UnlockIcon, etc.
+     * StarIcon, FavoriteIcon, LockIcon, UnlockIcon
 
 5. Component Examples:
    - Basic layout:
@@ -216,57 +216,56 @@ Rules:
      </IconButton>
 
    - Chart usage:
-     // Bar Chart
-     <BarChart
-       width={500}
-       height={300}
-       dataset={[
-         { month: 'Jan', value: 100 },
-         { month: 'Feb', value: 200 },
-         { month: 'Mar', value: 150 }
+     // Combined Bar and Line Chart
+     <ResponsiveChartContainer
+       series={[
+         { type: 'bar', data: [100, 150, 180, 120, 140] },
+         { type: 'line', data: [110, 140, 160, 130, 150] },
        ]}
-       xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-       series={[{ dataKey: 'value', label: 'Sales' }]}
-     />
-
-     // Line Chart
-     <LineChart
-       width={500}
-       height={300}
-       dataset={[
-         { time: '8:00', value: 20 },
-         { time: '12:00', value: 50 },
-         { time: '16:00', value: 30 }
-       ]}
-       xAxis={[{ scaleType: 'point', dataKey: 'time' }]}
-       series={[{ dataKey: 'value', label: 'Activity' }]}
-     />
-
-     // Pie Chart
-     <PieChart
-       width={400}
-       height={300}
-       series={[{
-         data: [
-           { id: 0, value: 35, label: 'A' },
-           { id: 1, value: 25, label: 'B' },
-           { id: 2, value: 40, label: 'C' }
-         ]
+       xAxis={[{
+         data: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+         scaleType: 'band',
+         id: 'months',
        }]}
-     />
-
-     // Scatter Chart
-     <ScatterChart
-       width={500}
        height={300}
-       dataset={[
-         { x: 1, y: 3, id: 1 },
-         { x: 3, y: 5, id: 2 },
-         { x: 5, y: 2, id: 3 }
+     >
+       <BarPlot />
+       <LinePlot />
+       <ChartsXAxis label="Monthly Sales" position="bottom" axisId="months" />
+     </ResponsiveChartContainer>
+
+     // Single Bar Chart
+     <ResponsiveChartContainer
+       series={[
+         { type: 'bar', data: [35, 45, 40, 50, 42] },
        ]}
-       xAxis={[{ dataKey: 'x' }]}
-       series={[{ dataKey: 'y' }]}
-     />
+       xAxis={[{
+         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+         scaleType: 'band',
+         id: 'weekdays',
+       }]}
+       height={300}
+     >
+       <BarPlot />
+       <ChartsXAxis label="Daily Traffic" position="bottom" axisId="weekdays" />
+     </ResponsiveChartContainer>
+
+     // Line Chart with Multiple Series
+     <ResponsiveChartContainer
+       series={[
+         { type: 'line', data: [1200, 1800, 2200, 1900, 2500] },
+         { type: 'line', data: [300, 450, 500, 400, 600] },
+       ]}
+       xAxis={[{
+         data: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+         scaleType: 'band',
+         id: 'weeks',
+       }]}
+       height={300}
+     >
+       <LinePlot />
+       <ChartsXAxis label="Weekly Performance" position="bottom" axisId="weeks" />
+     </ResponsiveChartContainer>
 
    - DataGrid usage:
      <Box sx={{ height: 400, width: '100%' }}>

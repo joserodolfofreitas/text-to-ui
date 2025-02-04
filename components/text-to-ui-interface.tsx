@@ -167,9 +167,9 @@ export function TextToUIInterface() {
                 Components {showComponents ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />}
               </Button>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-hidden">
               <div 
-                className="border rounded-lg p-4 min-h-[300px]"
+                className="border rounded-lg p-4 min-h-[300px] overflow-auto max-h-[calc(100vh-12rem)]"
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDrop}
               >

@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Box,
-  Container,
   Grid,
   Paper,
   Typography,
@@ -21,9 +20,10 @@ import {
   BarChart,
   PieChart,
   ScatterChart,
-  AreaChart,
-  CandlestickChart,
-  HeatmapChart,
+  ResponsiveChartContainer,
+  BarPlot,
+  LinePlot,
+  ChartsXAxis,
 } from '@mui/x-charts'
 
 // Import MUI X DataGrid components
@@ -103,7 +103,6 @@ export const previewScope = {
   
   // MUI Components
   Box,
-  Container,
   Grid,
   Paper,
   Typography,
@@ -121,9 +120,10 @@ export const previewScope = {
   BarChart,
   PieChart,
   ScatterChart,
-  AreaChart,
-  CandlestickChart,
-  HeatmapChart,
+  ResponsiveChartContainer,
+  BarPlot,
+  LinePlot,
+  ChartsXAxis,
 
   // MUI X DataGrid Components
   DataGrid,
