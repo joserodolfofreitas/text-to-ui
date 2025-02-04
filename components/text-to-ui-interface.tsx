@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { getLlamaResponse } from '@/lib/ollama'
 import { previewScope } from '@/lib/preview-scope'
+import * as Switch from '@radix-ui/react-switch'
+import { Label } from '@radix-ui/react-label'
 
 const DEFAULT_CODE = `<Box sx={{ p: 2 }}>
   <Typography variant="h4" gutterBottom>
@@ -18,19 +20,26 @@ const DEFAULT_CODE = `<Box sx={{ p: 2 }}>
   </Typography>
 </Box>`
 
+const editorStyles = {
+  fontSize: 12,
+  fontFamily: '"Fira Code", monospace',
+  padding: '8px',
+}
+
 export function TextToUIInterface() {
   const [prompt, setPrompt] = useState('')
   const [code, setCode] = useState(DEFAULT_CODE)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showComponents, setShowComponents] = useState(false)
+  const [useDeepThink, setUseDeepThink] = useState(false)
   const dropRef = useRef<HTMLDivElement>(null)
 
   const generateUI = async () => {
     setLoading(true)
     setError(null)
     try {
-      const response = await getLlamaResponse(prompt)
+      const response = await getLlamaResponse(prompt, useDeepThink)
       console.log('Generated code:', response)
       setCode(response)
     } catch (error: any) {
@@ -52,7 +61,7 @@ export function TextToUIInterface() {
   }
 
   return (
-    <div className="grid grid-cols-[300px_1fr] gap-8 min-h-[calc(100vh-12rem)]">
+    <div className="grid grid-cols-[400px_1fr] gap-8 min-h-[calc(100vh-12rem)]">
       <LiveProvider code={code} scope={previewScope} noInline={false}>
         <div className="space-y-8">
           <Card>
@@ -69,13 +78,28 @@ export function TextToUIInterface() {
               {error && (
                 <div className="text-sm text-destructive">{error}</div>
               )}
-              <Button
-                onClick={generateUI}
-                disabled={loading}
-                className="w-full"
-              >
-                {loading ? 'Generating...' : 'Generate UI'}
-              </Button>
+              <div className="flex items-center justify-between">
+                <Button
+                  onClick={generateUI}
+                  disabled={loading}
+                  className="flex-1 mr-4"
+                >
+                  {loading ? 'Generating...' : 'Generate UI'}
+                </Button>
+                <div className="flex items-center space-x-2">
+                  <Switch.Root
+                    checked={useDeepThink}
+                    onCheckedChange={setUseDeepThink}
+                    id="deepthink-mode"
+                    className="w-[42px] h-[25px] bg-gray-200 rounded-full relative data-[state=checked]:bg-primary outline-none cursor-default"
+                  >
+                    <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                  </Switch.Root>
+                  <Label htmlFor="deepthink-mode" className="text-sm font-medium leading-none cursor-pointer">
+                    DeepThink
+                  </Label>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
@@ -85,7 +109,7 @@ export function TextToUIInterface() {
             </CardHeader>
             <CardContent>
               <div className="bg-muted p-4 rounded-md">
-                <LiveEditor />
+                <LiveEditor style={editorStyles} />
               </div>
               <div className="text-destructive mt-2">
                 <LiveError />
