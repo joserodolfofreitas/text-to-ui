@@ -216,7 +216,14 @@ Rules:
      </IconButton>
 
    - Chart usage:
-     // Combined Bar and Line Chart
+     IMPORTANT: The examples below show the API structure. When implementing charts:
+     1. ALWAYS use data that matches the context of the user's request
+     2. Use realistic values and labels from the domain
+     3. If the prompt mentions specific metrics, use those exact metrics
+     4. Data points should reflect real-world patterns
+     5. Labels should use domain-specific terminology
+
+     // Chart API Example 1: Combined Charts
      <ResponsiveChartContainer
        series={[
          { type: 'bar', data: [100, 150, 180, 120, 140] },
