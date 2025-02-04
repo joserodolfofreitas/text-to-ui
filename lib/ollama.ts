@@ -215,7 +215,7 @@ Rules:
        <SettingsIcon />
      </IconButton>
 
-   - Chart usage:
+   - Chart and Data Grid usage:
      IMPORTANT: The examples below show the API structure. When implementing charts:
      1. ALWAYS use data that matches the context of the user's request
      2. Use realistic values and labels from the domain
@@ -274,7 +274,6 @@ Rules:
        <ChartsXAxis label="Weekly Performance" position="bottom" axisId="weeks" />
      </ResponsiveChartContainer>
 
-   - DataGrid usage:
      <Box sx={{ height: 400, width: '100%' }}>
        <DataGrid
          rows={[
