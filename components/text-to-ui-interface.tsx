@@ -36,6 +36,7 @@ export function TextToUIInterface() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showComponents, setShowComponents] = useState(false)
+  const [showCode, setShowCode] = useState(false)
   const [useDeepThink, setUseDeepThink] = useState(false)
   const dropRef = useRef<HTMLDivElement>(null)
 
@@ -95,10 +96,10 @@ export function TextToUIInterface() {
             </CardHeader>
             <CardContent className="space-y-4">
               <Textarea
-                className="min-h-[120px] w-full"
+                className="min-h-[10px] w-full"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Describe the UI you want to generate..."
+                placeholder="Describe the UI you want to generate"
               />
               {error && (
                 <div className="text-sm text-destructive">Error: {error}</div>
@@ -129,17 +130,27 @@ export function TextToUIInterface() {
           </Card>
 
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle>Code</CardTitle>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="h-8 px-2"
+                onClick={() => setShowCode(!showCode)}
+              >
+                {showCode ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </Button>
             </CardHeader>
-            <CardContent>
-              <div className="bg-muted p-4 rounded-md">
-                <LiveEditor style={editorStyles} />
-              </div>
-              <div className="text-destructive mt-2 space-y-2">
-                <LiveError />
-              </div>
-            </CardContent>
+            {showCode && (
+              <CardContent>
+                <div className="bg-muted p-4 rounded-md">
+                  <LiveEditor style={editorStyles} />
+                </div>
+                <div className="text-destructive mt-2 space-y-2">
+                  <LiveError />
+                </div>
+              </CardContent>
+            )}
           </Card>
         </div>
         
