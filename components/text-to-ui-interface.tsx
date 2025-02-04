@@ -11,14 +11,48 @@ import { previewScope } from '@/lib/preview-scope'
 import * as Switch from '@radix-ui/react-switch'
 import { Label } from '@radix-ui/react-label'
 
-const DEFAULT_CODE = `<Box sx={{ p: 2 }}>
-  <Typography variant="h4" gutterBottom>
-    Welcome!
-  </Typography>
-  <Typography variant="body1" sx={{ mb: 2, color: "text.secondary" }}>
-    Describe your UI in the text area above and click Generate UI.
-  </Typography>
-</Box>`
+// Debug scope
+console.log('Available in scope:', Object.keys(previewScope).sort())
+
+const DEFAULT_CODE = `function Demo() {
+  return (
+    <Container maxWidth="lg">
+      <Box my={4}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Modern Financial Dashboard
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardHeader title="Total Balance" />
+              <CardContent>
+                <Typography variant="h5">$5,000.75</Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">View Details</Button>
+              </CardActions>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardHeader title="Recent Transactions" />
+              <CardContent>
+                <Stack direction="column" spacing={2}>
+                  <Typography variant="body1">Transaction 1: $50.00</Typography>
+                  <Typography variant="body1">Transaction 2: -$20.00</Typography>
+                  <Typography variant="body1">Transaction 3: $75.00</Typography>
+                </Stack>
+              </CardContent>
+              <CardActions>
+                <Button size="small">View All Transactions</Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
+  );
+}`
 
 const editorStyles = {
   fontSize: 12,
@@ -29,14 +63,14 @@ const editorStyles = {
 export function TextToUIInterface() {
   const [prompt, setPrompt] = useState('')
   const [code, setCode] = useState(DEFAULT_CODE)
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showComponents, setShowComponents] = useState(false)
   const [useDeepThink, setUseDeepThink] = useState(false)
   const dropRef = useRef<HTMLDivElement>(null)
 
   const generateUI = async () => {
-    setLoading(true)
+    setIsLoading(true)
     setError(null)
     try {
       const response = await getLlamaResponse(prompt, useDeepThink)
@@ -49,7 +83,7 @@ export function TextToUIInterface() {
         setError(error.message || 'An error occurred while generating the UI')
       }
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -60,9 +94,30 @@ export function TextToUIInterface() {
     setCode(componentCode)
   }
 
+  // Add error handling for scope
+  const handleError = (error: Error) => {
+    console.error('LiveProvider error:', error)
+    console.log('Current scope:', Object.keys(previewScope).sort())
+  }
+
   return (
     <div className="grid grid-cols-[400px_1fr] gap-8 min-h-[calc(100vh-12rem)]">
-      <LiveProvider code={code} scope={previewScope} noInline={false}>
+      <LiveProvider 
+        code={code} 
+        scope={previewScope} 
+        noInline={false}
+        transformCode={(code) => {
+          console.log('Code being rendered:', code)
+          console.log('Full scope:', previewScope)
+          console.log('Scope keys:', Object.keys(previewScope).sort())
+          return code
+        }}
+        onError={(error) => {
+          console.error('LiveProvider error:', error)
+          console.log('Full scope at error:', previewScope)
+          handleError(error)
+        }}
+      >
         <div className="space-y-8">
           <Card>
             <CardHeader>
@@ -76,15 +131,15 @@ export function TextToUIInterface() {
                 placeholder="Describe the UI you want to generate..."
               />
               {error && (
-                <div className="text-sm text-destructive">{error}</div>
+                <div className="text-sm text-destructive">Error: {error}</div>
               )}
               <div className="flex items-center justify-between">
                 <Button
                   onClick={generateUI}
-                  disabled={loading}
+                  disabled={isLoading}
                   className="flex-1 mr-4"
                 >
-                  {loading ? 'Generating...' : 'Generate UI'}
+                  {isLoading ? 'Generating...' : 'Generate UI'}
                 </Button>
                 <div className="flex items-center space-x-2">
                   <Switch.Root
@@ -111,7 +166,7 @@ export function TextToUIInterface() {
               <div className="bg-muted p-4 rounded-md">
                 <LiveEditor style={editorStyles} />
               </div>
-              <div className="text-destructive mt-2">
+              <div className="text-destructive mt-2 space-y-2">
                 <LiveError />
               </div>
             </CardContent>

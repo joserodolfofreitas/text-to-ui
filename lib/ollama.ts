@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const DEFAULT_MODEL = 'llama3.2';
+//const DEFAULT_MODEL = 'llama3.2';
+const DEFAULT_MODEL = 'deepseek-coder-v2';
 const DEEPTHINK_MODEL = 'deepseek-r1';
 
 export function getModelForPrompt(prompt: string): string {
@@ -8,6 +9,15 @@ export function getModelForPrompt(prompt: string): string {
 }
 
 const SYSTEM_PROMPT = `You are an expert UI component generator specializing in Material-UI (MUI). Your task is to create sophisticated, well-structured, and visually appealing user interfaces.
+
+IMPORTANT: Your response MUST be valid TypeScript/TSX code that follows these rules:
+1. Include ALL necessary imports at the top
+2. Export the component as default
+3. Use proper TypeScript types for props and state
+4. Ensure all JSX elements are properly closed
+5. Use proper comma separation in object literals and arrays
+6. Follow proper TSX syntax for component props
+7. Avoid any syntax errors or undefined references
 
 Available MUI Components:
 
@@ -41,6 +51,18 @@ Card Components:
 - CardContent: Main content area with padding
 - CardActions: Action buttons container
 
+Icons:
+For icons, ONLY use the following from @mui/icons-material:
+- ArrowUpward as UpIcon
+- ArrowDownward as DownIcon
+- Menu as MenuIcon
+- Close as CloseIcon
+- Add as AddIcon
+- Delete as DeleteIcon
+- Edit as EditIcon
+- Settings as SettingsIcon
+- Search as SearchIcon
+
 Best Practices:
 1. Create responsive layouts using Grid breakpoints
 2. Implement proper spacing and hierarchy
@@ -49,7 +71,7 @@ Best Practices:
 5. Apply consistent spacing with MUI's system
 6. Make interfaces accessible with proper ARIA labels
 7. Use color effectively for visual hierarchy
-8. Include hover and focus states
+8. Always import icons from @mui/icons-material
 
 Example of a Comprehensive UI:
 
@@ -119,21 +141,32 @@ Example of a Comprehensive UI:
 </Box>`
 
 function cleanGeneratedCode(code: string, model: string): string {
+  // Remove "Generated code:" prefix
+  code = code.replace(/^Generated code:\s*/i, '')
+
   // Remove markdown code blocks if present
-  code = code.replace(/\`\`\`jsx?/g, '').replace(/\`\`\`/g, '')
+  code = code.replace(/```[a-z]*\n/g, '').replace(/```/g, '')
   
   if (model === DEEPTHINK_MODEL) {
     // Remove content between <think> tags for DeepThink model
     code = code.replace(/<think>[\s\S]*?<\/think>/g, '')
   }
+
+  // Remove any text before first import statement
+  const importIndex = code.indexOf('import React')
+  if (importIndex >= 0) {
+    code = code.substring(importIndex)
+  }
+
+  // Find the last export default statement and include everything up to it
+  const exportIndex = code.lastIndexOf('export default')
+  if (exportIndex >= 0) {
+    code = code.substring(0, code.indexOf(';', exportIndex) + 1)
+  }
   
-  // Remove any text before the first < and after the last >
-  code = code.substring(code.indexOf('<'), code.lastIndexOf('>') + 1)
+  // Trim whitespace and remove any extra newlines
+  code = code.trim().replace(/\n{3,}/g, '\n\n')
   
-  // Trim whitespace
-  code = code.trim()
-  
-  console.log('Cleaned code:', code)
   return code
 }
 
@@ -142,18 +175,53 @@ export async function getLlamaResponse(prompt: string, useDeepThink: boolean = f
     const model = useDeepThink ? DEEPTHINK_MODEL : DEFAULT_MODEL
     console.log('Using model:', model)
 
+    // First request: Generate the component
     const response = await axios.post('/api/ollama', {
       model,
-      prompt: `${SYSTEM_PROMPT}\n\nUser: Create a comprehensive UI for the following: ${prompt}\n\nAssistant: Here's a sophisticated MUI implementation:`,
-      stream: true
+      prompt: `You are a React expert. Create a UI component following this structure. Return ONLY the component code, NO imports:
+
+function Demo() {
+  return (
+    // Your implementation here using MUI components
+  );
+}
+
+Rules:
+1. MUST be a function named "Demo" with no parameters
+2. MUST have a return statement with JSX
+3. DO NOT include any imports - all components are already available in scope
+4. Use ONLY these components (they are already imported):
+   - Box, Container, Grid, Paper, Typography, Button, TextField, Card, CardHeader, CardContent, CardActions, Stack, IconButton
+   - Available icons (MUST use with Icon suffix):
+     * Navigation: MenuIcon, ArrowBackIcon, ArrowForwardIcon, ArrowUpwardIcon, ArrowDownwardIcon
+     * Actions: AddIcon, DeleteIcon, EditIcon, CloseIcon, SaveIcon, ShareIcon, SearchIcon
+     * Status: CheckIcon, ErrorIcon, InfoIcon, WarningIcon, HelpIcon
+     * Common: HomeIcon, SettingsIcon, PersonIcon, NotificationsIcon, DashboardIcon
+     * Media: PlayArrowIcon, PauseIcon, StopIcon, VolumeUpIcon, VolumeDownIcon
+     * Files: FolderIcon, FileIcon, DownloadIcon, UploadIcon, PrintIcon
+     * Social: ChatIcon, MailIcon, PhoneIcon, SendIcon
+     * And more: StarIcon, FavoriteIcon, LockIcon, UnlockIcon, etc.
+5. Icon usage example:
+   <IconButton>
+     <SettingsIcon />
+   </IconButton>
+6. Return ONLY the component code, no explanations or imports
+
+Create a UI for: ${prompt}`,
+      stream: false
     }, {
       headers: {
         'Content-Type': 'application/json',
       }
     })
 
+    if (!response.data || !response.data.response) {
+      throw new Error('Invalid response from Ollama API')
+    }
+
     const generatedCode = cleanGeneratedCode(response.data.response, model)
-    return generatedCode
+    return generatedCode;
+
   } catch (error) {
     console.error('Error calling Ollama:', error)
     throw new Error('Failed to generate UI component')
