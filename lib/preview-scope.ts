@@ -15,6 +15,32 @@ import {
   IconButton,
 } from '@mui/material'
 
+// Import MUI X Charts components
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ScatterChart,
+  AreaChart,
+  CandlestickChart,
+  HeatmapChart,
+} from '@mui/x-charts'
+
+// Import MUI X DataGrid components
+import {
+  DataGrid,
+  GridToolbar,
+  GridActionsCellItem,
+  GridRowModes,
+  GridRowEditStopReasons,
+} from '@mui/x-data-grid'
+
+// Import MUI X TreeView components
+import {
+  TreeView,
+  TreeItem,
+} from '@mui/x-tree-view'
+
 // Import ALL Material-UI icons individually
 import SearchIcon from '@mui/icons-material/Search'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -89,6 +115,26 @@ export const previewScope = {
   CardActions,
   Stack,
   IconButton,
+
+  // MUI X Charts Components
+  LineChart,
+  BarChart,
+  PieChart,
+  ScatterChart,
+  AreaChart,
+  CandlestickChart,
+  HeatmapChart,
+
+  // MUI X DataGrid Components
+  DataGrid,
+  GridToolbar,
+  GridActionsCellItem,
+  GridRowModes,
+  GridRowEditStopReasons,
+
+  // MUI X TreeView Components
+  TreeView,
+  TreeItem,
 
   // MUI Icons - explicitly added to scope
   SearchIcon,

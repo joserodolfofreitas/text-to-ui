@@ -23,7 +23,6 @@ Available MUI Components:
 
 Layout Components:
 - Box: Wrapper component for layouts with sx prop support
-- Container: Centered content container with maxWidth
 - Stack: Flexible one-dimensional layouts (vertical/horizontal)
 - Grid: Powerful 12-column grid system
   - Use Grid container with spacing
@@ -76,68 +75,66 @@ Best Practices:
 Example of a Comprehensive UI:
 
 <Box sx={{ p: 3 }}>
-  <Container maxWidth="lg">
-    <Grid container spacing={3}>
-      <Grid item xs={12} md={8}>
-        <Typography variant="h4" color="primary" gutterBottom>
-          Dashboard Overview
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          Welcome back! Here's your latest activity summary.
-        </Typography>
-        
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <Paper sx={{ p: 3, height: "100%" }}>
-              <Stack spacing={2}>
-                <Typography variant="h6">Recent Activity</Typography>
-                <TextField
-                  fullWidth
-                  label="Search activities"
-                  variant="outlined"
-                  size="small"
-                />
-                <Button variant="contained" color="primary">
-                  View All Activities
-                </Button>
-              </Stack>
-            </Paper>
-          </Grid>
-          
-          <Grid item xs={12} sm={6}>
-            <Card sx={{ height: "100%" }}>
-              <CardHeader
-                title="Statistics"
-                subheader="Last 30 days"
+  <Grid container spacing={3}>
+    <Grid item xs={12} md={8}>
+      <Typography variant="h4" color="primary" gutterBottom>
+        Dashboard Overview
+      </Typography>
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+        Welcome back! Here's your latest activity summary.
+      </Typography>
+      
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <Paper sx={{ p: 3, height: "100%" }}>
+            <Stack spacing={2}>
+              <Typography variant="h6">Recent Activity</Typography>
+              <TextField
+                fullWidth
+                label="Search activities"
+                variant="outlined"
+                size="small"
               />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  Your performance has increased by 25%
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small" color="primary">Learn More</Button>
-              </CardActions>
-            </Card>
-          </Grid>
+              <Button variant="contained" color="primary">
+                View All Activities
+              </Button>
+            </Stack>
+          </Paper>
+        </Grid>
+        
+        <Grid item xs={12} sm={6}>
+          <Card sx={{ height: "100%" }}>
+            <CardHeader
+              title="Statistics"
+              subheader="Last 30 days"
+            />
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                Your performance has increased by 25%
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small" color="primary">Learn More</Button>
+            </CardActions>
+          </Card>
         </Grid>
       </Grid>
-
-      <Grid item xs={12} md={4}>
-        <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" gutterBottom>Quick Actions</Typography>
-          <Stack spacing={2}>
-            <Button variant="outlined" color="primary" fullWidth>
-              Create New Report
-            </Button>
-            <Button variant="outlined" color="secondary" fullWidth>
-              View Analytics
-            </Button>
-          </Stack>
-        </Paper>
-      </Grid>
     </Grid>
-  </Container>
+
+    <Grid item xs={12} md={4}>
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+        <Stack spacing={2}>
+          <Button variant="outlined" color="primary" fullWidth>
+            Create New Report
+          </Button>
+          <Button variant="outlined" color="secondary" fullWidth>
+            View Analytics
+          </Button>
+        </Stack>
+      </Paper>
+    </Grid>
+  </Grid>
 </Box>`
 
 function cleanGeneratedCode(code: string, model: string): string {
@@ -191,7 +188,10 @@ Rules:
 2. MUST have a return statement with JSX
 3. DO NOT include any imports - all components are already available in scope
 4. Use ONLY these components (they are already imported):
-   - Box, Container, Grid, Paper, Typography, Button, TextField, Card, CardHeader, CardContent, CardActions, Stack, IconButton
+   - MUI Core: Box, Grid, Paper, Typography, Button, TextField, Card, CardHeader, CardContent, CardActions, Stack, IconButton
+   - MUI X Charts: LineChart, BarChart, PieChart, ScatterChart
+   - MUI X DataGrid: DataGrid, GridToolbar, GridActionsCellItem, GridRowModes, GridRowEditStopReasons
+   - MUI X TreeView: TreeView, TreeItem
    - Available icons (MUST use with Icon suffix):
      * Navigation: MenuIcon, ArrowBackIcon, ArrowForwardIcon, ArrowUpwardIcon, ArrowDownwardIcon
      * Actions: AddIcon, DeleteIcon, EditIcon, CloseIcon, SaveIcon, ShareIcon, SearchIcon
@@ -201,10 +201,96 @@ Rules:
      * Files: FolderIcon, FileIcon, DownloadIcon, UploadIcon, PrintIcon
      * Social: ChatIcon, MailIcon, PhoneIcon, SendIcon
      * And more: StarIcon, FavoriteIcon, LockIcon, UnlockIcon, etc.
-5. Icon usage example:
-   <IconButton>
-     <SettingsIcon />
-   </IconButton>
+
+5. Component Examples:
+   - Basic layout:
+     <Box sx={{ maxWidth: 'lg', p: 4 }}>
+       <Typography variant="h4" gutterBottom>
+         Title
+       </Typography>
+     </Box>
+
+   - Icon usage:
+     <IconButton>
+       <SettingsIcon />
+     </IconButton>
+
+   - Chart usage:
+     // Bar Chart
+     <BarChart
+       width={500}
+       height={300}
+       dataset={[
+         { month: 'Jan', value: 100 },
+         { month: 'Feb', value: 200 },
+         { month: 'Mar', value: 150 }
+       ]}
+       xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
+       series={[{ dataKey: 'value', label: 'Sales' }]}
+     />
+
+     // Line Chart
+     <LineChart
+       width={500}
+       height={300}
+       dataset={[
+         { time: '8:00', value: 20 },
+         { time: '12:00', value: 50 },
+         { time: '16:00', value: 30 }
+       ]}
+       xAxis={[{ scaleType: 'point', dataKey: 'time' }]}
+       series={[{ dataKey: 'value', label: 'Activity' }]}
+     />
+
+     // Pie Chart
+     <PieChart
+       width={400}
+       height={300}
+       series={[{
+         data: [
+           { id: 0, value: 35, label: 'A' },
+           { id: 1, value: 25, label: 'B' },
+           { id: 2, value: 40, label: 'C' }
+         ]
+       }]}
+     />
+
+     // Scatter Chart
+     <ScatterChart
+       width={500}
+       height={300}
+       dataset={[
+         { x: 1, y: 3, id: 1 },
+         { x: 3, y: 5, id: 2 },
+         { x: 5, y: 2, id: 3 }
+       ]}
+       xAxis={[{ dataKey: 'x' }]}
+       series={[{ dataKey: 'y' }]}
+     />
+
+   - DataGrid usage:
+     <Box sx={{ height: 400, width: '100%' }}>
+       <DataGrid
+         rows={[
+           { id: 1, name: 'John', age: 35 },
+           { id: 2, name: 'Jane', age: 28 }
+         ]}
+         columns={[
+           { field: 'name', headerName: 'Name', width: 130 },
+           { field: 'age', headerName: 'Age', width: 90 }
+         ]}
+         components={{ Toolbar: GridToolbar }}
+       />
+     </Box>
+
+   - TreeView usage:
+     <TreeView defaultExpandIcon={<ChevronRightIcon />} defaultCollapseIcon={<ExpandMoreIcon />}>
+       <TreeItem nodeId="1" label="Main">
+         <TreeItem nodeId="2" label="Child 1" />
+         <TreeItem nodeId="3" label="Child 2" />
+       </TreeItem>
+     </TreeView>
+
 6. Return ONLY the component code, no explanations or imports
 
 Create a UI for: ${prompt}`,
@@ -220,7 +306,7 @@ Create a UI for: ${prompt}`,
     }
 
     const generatedCode = cleanGeneratedCode(response.data.response, model)
-    return generatedCode;
+    return generatedCode
 
   } catch (error) {
     console.error('Error calling Ollama:', error)

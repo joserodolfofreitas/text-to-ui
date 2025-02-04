@@ -14,43 +14,13 @@ import { Label } from '@radix-ui/react-label'
 // Debug scope
 console.log('Available in scope:', Object.keys(previewScope).sort())
 
-const DEFAULT_CODE = `function Demo() {
+const DEFAULT_CODE = `function hello() {
   return (
-    <Container maxWidth="lg">
-      <Box my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Modern Financial Dashboard
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardHeader title="Total Balance" />
-              <CardContent>
-                <Typography variant="h5">$5,000.75</Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">View Details</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardHeader title="Recent Transactions" />
-              <CardContent>
-                <Stack direction="column" spacing={2}>
-                  <Typography variant="body1">Transaction 1: $50.00</Typography>
-                  <Typography variant="body1">Transaction 2: -$20.00</Typography>
-                  <Typography variant="body1">Transaction 3: $75.00</Typography>
-                </Stack>
-              </CardContent>
-              <CardActions>
-                <Button size="small">View All Transactions</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        </Grid>
-      </Box>
-    </Container>
+    <Box maxWidth="lg">
+      <Typography variant="h4" gutterBottom> 
+        Empty
+      </Typography>
+    </Box>
   );
 }`
 
